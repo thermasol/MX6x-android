@@ -11,4 +11,5 @@ PRODUCT_IMX_TRUSTY := true
 BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/net/ethernet/freescale/fec.ko \
     $(KERNEL_OUT)/drivers/net/wireless/broadcom/brcm80211/brcmutil/brcmutil.ko \
-    $(KERNEL_OUT)/drivers/net/wireless/broadcom/brcm80211/brcmfmac/brcmfmac.ko
+    $(KERNEL_OUT)/drivers/net/wireless/broadcom/brcm80211/brcmfmac/brcmfmac.ko \
+    $(KERNEL_OUT)/drivers/input/touchscreen/atmel_mxt_ts.ko
