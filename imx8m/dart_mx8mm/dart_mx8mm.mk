@@ -238,7 +238,8 @@ PRODUCT_PACKAGES += \
     cansniffer \
     isotprecv \
     isotpsend \
-    isotpserver
+    isotpserver \
+    thermasol
 
 # Add oem unlocking option in settings.
 PRODUCT_PROPERTY_OVERRIDES += ro.frp.pst=/dev/block/by-name/presistdata
