@@ -119,6 +119,9 @@ git clone https://github.com/linux-can/can-utils.git ${VENDOR_BASE_DIR}/can-util
 cd ${VENDOR_BASE_DIR}/can-utils > /dev/null
 git checkout 791890542ac1ce99131f36435e72af5635afc2fa -b ${BASE_BRANCH_NAME}
 
+pr_info "clone ${VENDOR_BASE_DIR}/AndroidSetup"
+git clone https://github.com/thermasol/AndroidSetup.git ${VENDOR_BASE_DIR}/thermasol
+
 pr_info "###########################"
 pr_info "# Apply framework patches #"
 pr_info "###########################"
