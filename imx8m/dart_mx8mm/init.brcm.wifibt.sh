@@ -210,6 +210,8 @@ wifi_stop()
 #              Execution starts here            #
 #################################################
 
+modprobe -d /vendor/lib/modules atmel_mxt_ts
+
 wifi_start
 
 # BT_BUF up
