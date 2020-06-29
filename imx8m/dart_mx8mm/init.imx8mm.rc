@@ -39,3 +39,9 @@ on property:sys.boot_completed=1
     # system-background is for system tasks that should only run on
     # little cores, not on bigs to be used only by init
     write /dev/cpuset/system-background/cpus 0-2
+    start touchsteam
+
+service touchsteam /system/bin/thermasol
+    class core
+    disabled
+    oneshot

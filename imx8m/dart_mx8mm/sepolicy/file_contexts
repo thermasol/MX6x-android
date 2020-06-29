@@ -36,3 +36,5 @@
 #Thermal HAL service
 /vendor/bin/hw/android\.hardware\.thermal@2\.0-service.imx         u:object_r:hal_thermal_default_exec:s0
 
+#TouchSTeam
+/system/bin/thermasol u:object_r:touchsteam_exec:s0
