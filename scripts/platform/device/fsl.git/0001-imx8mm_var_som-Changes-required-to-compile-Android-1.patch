@@ -1,8 +1,7 @@
 From 46169c5395e1ea51ee27b5647d8debc0e5ccccb6 Mon Sep 17 00:00:00 2001
-From: Mohit Singh <pal.mohit.singh@gmail.com>
-Date: Fri, 27 Mar 2020 12:00:59 -0700
-Subject: [PATCH] imx8mm_var_som: Changes required to compile Android 10 for
- device/variscite.
+From: Blake W. Ford <blake@thermasol.com>
+Date: Wed, 12 Aug 2020 12:00:59 -0700
+Subject: [PATCH] imx8mm_var_som: Changes required to compile Android 10 for ThermaTouch.
 
 ---
  common/build/Makefile            | 9 ++++++---
@@ -34,6 +33,20 @@ index 5cf9b6b2..7142865e 100644
  -include ${product_path}/AndroidUboot.mk
  -include ${product_path}/AndroidTee.mk
  
+diff --git a/imx8m/BoardConfigCommon.mk b/imx8m/BoardConfigCommon.mk
+index 5fedf99b..2630feb0 100644
+--- a/imx8m/BoardConfigCommon.mk
++++ b/imx8m/BoardConfigCommon.mk
+@@ -119,7 +119,8 @@ BOARD_BOOTIMAGE_PARTITION_SIZE := 50331648
+ ifeq ($(IMX_NO_PRODUCT_PARTITION),true)
+ BOARD_SYSTEMIMAGE_PARTITION_SIZE := 2952790016
+ else
+-BOARD_SYSTEMIMAGE_PARTITION_SIZE := 1610612736
++# Updated for ThermaSol videos
++BOARD_SYSTEMIMAGE_PARTITION_SIZE := 1805307904
+ endif
+
+ BOARD_VENDORIMAGE_PARTITION_SIZE := 536870912
 diff --git a/common/imx_path/ImxPathConfig.mk b/common/imx_path/ImxPathConfig.mk
 index e0693010..0d3a4adf 100644
 --- a/common/imx_path/ImxPathConfig.mk
