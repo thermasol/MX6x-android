@@ -101,6 +101,26 @@ PRODUCT_COPY_FILES += \
     device/fsl/common/tools/uuu_imx_android_flash.bat:uuu_imx_android_flash.bat \
     device/fsl/common/tools/uuu_imx_android_flash.sh:uuu_imx_android_flash.sh
 
+# ThermaSol videos
+PRODUCT_COPY_FILES += \
+    ../resident_videos/beach_zen.mp4:system/thermasol_assets/videos/beach_zen.mp4 \
+    ../resident_videos/cascading_waterfall.mp4:system/thermasol_assets/videos/cascading_waterfall.mp4 \
+    ../resident_videos/crackling_fireplace.mp4:system/thermasol_assets/videos/crackling_fireplace.mp4 \
+    ../resident_videos/golden_sunset.mp4:system/thermasol_assets/videos/golden_sunset.mp4 \
+    ../resident_videos/island_getaway.mp4:system/thermasol_assets/videos/island_getaway.mp4 \
+    ../resident_videos/mountain_stream.mp4:system/thermasol_assets/videos/mountain_stream.mp4 \
+    ../resident_videos/ocean_voyage.mp4:system/thermasol_assets/videos/ocean_voyage.mp4 \
+    ../resident_videos/mood_video.mp4:system/thermasol_assets/videos/mood_video.mp4 \
+    ../resident_videos/smoke_blue.mp4:system/thermasol_assets/videos/smoke_blue.mp4 \
+    ../resident_videos/smoke_green.mp4:system/thermasol_assets/videos/smoke_green.mp4 \
+    ../resident_videos/smoke_indigo.mp4:system/thermasol_assets/videos/smoke_indigo.mp4 \
+    ../resident_videos/smoke_orange.mp4:system/thermasol_assets/videos/smoke_orange.mp4 \
+    ../resident_videos/smoke_red.mp4:system/thermasol_assets/videos/smoke_red.mp4 \
+    ../resident_videos/smoke_violet.mp4:system/thermasol_assets/videos/smoke_violet.mp4 \
+    ../resident_videos/smoke_yellow.mp4:system/thermasol_assets/videos/smoke_yellow.mp4 \
+    ../resident_videos/spa_lights.mp4:system/thermasol_assets/videos/spa_lights.mp4 \
+    ../resident_videos/spring_forest.mp4:system/thermasol_assets/videos/spring_forest.mp4
+#    ../resident_videos/showroom_video.mp4:system/thermasol_assets/videos/showroom_video.mp4
 
 USE_XML_AUDIO_POLICY_CONF := 1
 
