@@ -1,0 +1,4 @@
+<resources>
+ <bool name="profile_supported_a2dp">false</bool>
+ <bool name="profile_supported_a2dp_sink">true</bool>
+</resources>
