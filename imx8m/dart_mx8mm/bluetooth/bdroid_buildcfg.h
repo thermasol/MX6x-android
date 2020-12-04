@@ -18,7 +18,9 @@
 #ifndef _BDROID_BUILDCFG_H
 #define _BDROID_BUILDCFG_H
 
-#define BTM_DEF_LOCAL_NAME "DART-MX8M"
+#define BTM_DEF_LOCAL_NAME "THERMATOUCH"
+
+#define BTA_DM_COD {0x20, 0x04, 0x18}
 
 // Wide-band speech support
 #define BTM_WBS_INCLUDED TRUE
