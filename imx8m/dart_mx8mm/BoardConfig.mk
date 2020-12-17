@@ -113,7 +113,8 @@ BOARD_PREBUILT_DTBOIMAGE := out/target/product/dart_mx8mm/dtbo-imx8mm-var-dart.i
 TARGET_BOARD_DTS_CONFIG := \
         imx8mm-var-dart:fsl-imx8mm-var-dart.dtb \
 	imx8mm-var-som:fsl-imx8mm-var-som.dtb \
-	imx8mm-var-som-v10:fsl-imx8mm-var-som-rev10.dtb
+	imx8mm-var-som-v10:fsl-imx8mm-var-som-rev10.dtb \
+	imx8mm-var-som-7inch:fsl-imx8mm-var-som-7inch.dtb
 
 BOARD_SEPOLICY_DIRS := \
        device/fsl/imx8m/sepolicy \
