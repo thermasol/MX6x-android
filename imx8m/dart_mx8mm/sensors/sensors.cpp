@@ -200,9 +200,9 @@ static int therma_poll(struct sensors_poll_device_t* pollDevice __unused, sensor
 static int therma_close(struct hw_device_t* device __unused)
 {
     gKeepPolling = false;
-    pthread_mutex_destroy(&gEventLock, nullptr);
-    pthread_mutex_destroy(&gAccelerometer.lock, nullptr);
-    pthread_mutex_destroy(&gTemperature.lock, nullptr);
+    pthread_mutex_destroy(&gEventLock);
+    pthread_mutex_destroy(&gAccelerometer.lock);
+    pthread_mutex_destroy(&gTemperature.lock);
 
     return 0;
 }
