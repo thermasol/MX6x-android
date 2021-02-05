@@ -5,11 +5,14 @@
 
 #define LOG_TAG "ThermaSolSensors"
 
+#ifdef __ANDROID__
+#include <hardware/sensors.h>
+#endif
+
 #include <stdlib.h>
 #include <pthread.h>
 #include <unistd.h>
 #include <string.h>
-#include <hardware/sensors.h>
 
 #include <deque>
 #include <chrono>
@@ -209,7 +212,8 @@ static int therma_close(struct hw_device_t* device __unused)
 
 static const struct sensor_t sSensorList[] =
 {
-    { .name       = "Static Orientation 3-Axis Accelerometer",
+    {
+      .name       = "Static Orientation 3-Axis Accelerometer",
       .vendor     = "ThermaSol",
       .version    = 10,
       .handle     = ACCEL_HANDLE,
@@ -226,7 +230,8 @@ static const struct sensor_t sSensorList[] =
       .flags = SENSOR_FLAG_CONTINUOUS_MODE,
       .reserved   = {}
     },
-    { .name       = "Steam Room Temperature Sensor",
+    {
+      .name       = "Steam Room Temperature Sensor",
       .vendor     = "ThermaSol",
       .version    = 10,
       .handle     = TEMP_HANDLE,
@@ -252,7 +257,11 @@ static int get_thermasol_sensors_list(struct sensors_module_t* module __unused, 
 }
 
 // Implemented, but should never be called
-static int therma_delay(struct sensors_poll_device_t* a, int b, int64_t c);
+static int therma_delay(struct sensors_poll_device_t* a __unused, int b __unused, int64_t c __unused)
+{
+    return 0;
+}
+
 static int open_thermasol_sensors(const struct hw_module_t* module, const char* name __unused, struct hw_device_t** device)
 {
     srand(time(nullptr));
@@ -260,6 +269,9 @@ static int open_thermasol_sensors(const struct hw_module_t* module, const char* 
     pthread_mutex_init(&gAccelerometer.lock, nullptr);
     pthread_mutex_init(&gTemperature.lock, nullptr);
 
+    gKeepPolling = true;
+
+#ifdef __ANDROID__
     gPollDevice.common.tag = HARDWARE_DEVICE_TAG;
     gPollDevice.common.version = SENSORS_DEVICE_API_VERSION_1_3;
     gPollDevice.common.module = (struct hw_module_t*) module;
@@ -272,13 +284,13 @@ static int open_thermasol_sensors(const struct hw_module_t* module, const char* 
 
     gPollDevice.setDelay = therma_delay;
 
-    gKeepPolling = true;
-
     *device = &gPollDevice.common;
+#endif
 
     return 0;
 }
 
+#ifdef __ANDROID__
 static struct hw_module_methods_t thermasol_module_methods =
 {
     .open = open_thermasol_sensors
@@ -298,8 +310,47 @@ struct sensors_module_t HAL_MODULE_INFO_SYM =
     },
     .get_sensors_list = get_thermasol_sensors_list
 };
-
-static int therma_delay(struct sensors_poll_device_t* a __unused, int b __unused, int64_t c __unused)
+#else
+#include <cstdio>
+#include <sstream>
+#include <iomanip>
+int main()
 {
+    sensors_event_t events[39];
+    therma_activate(nullptr, 0, 0);
+    therma_activate(nullptr, 1, 0);
+    therma_batch(nullptr, 0, 0, 66.7*1000*1000, 0);
+    therma_batch(nullptr, 1, 0, ((int64_t)4*1000*1000*1000), 0);
+    therma_flush(nullptr, 0);
+    therma_flush(nullptr, 1);
+    therma_activate(nullptr, 0, 1);
+    therma_activate(nullptr, 1, 1);
+    while(true)
+    {
+        usleep(1);
+        int count = therma_poll(nullptr, events, 39);
+        while(count--)
+        {
+            sensors_event_t* event = &events[count];
+            if(event->type != SENSOR_TYPE_META_DATA)
+            {
+                std::stringstream ss;
+                time_t time = event->timestamp/1000/1000/1000; // seconds
+                ss << std::put_time(std::localtime(&time), "%Y-%m-%d %X");
+                printf("%s: ", ss.str().c_str());
+                switch(events[count].sensor)
+                {
+                    case ACCEL_HANDLE:
+                        printf("%.2f %.2f %.2f\n", event->acceleration.x, event->acceleration.y, event->acceleration.z);
+                        break;
+                    case TEMP_HANDLE:
+                        printf("%.2f\n", event->temperature);
+                        break;
+                }
+            }
+        }
+    }
+
     return 0;
 }
+#endif
