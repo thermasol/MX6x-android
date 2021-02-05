@@ -9,6 +9,7 @@
 #include <hardware/sensors.h>
 #endif
 
+#include <cstdio>
 #include <stdlib.h>
 #include <pthread.h>
 #include <unistd.h>
@@ -70,18 +71,27 @@ void* accelerometer(void* parameters)
 float read_temperature_sensor()
 {
     float reading = 0.0f;
+    const char* sensor = "";
 #ifdef __ANDROID__
-    const char* TEMPERATURE_SENSOR_FILE = "/sys/bus/iio/devices/iio:device0/in_voltage_raw";
+    sensor = "/sys/bus/iio/devices/iio:device0/in_voltage_raw";
 #else
-    const float MIN_SENSOR_VALUE = 35.0f;
-    const float MAX_SENSOR_VALUE = 230.0f;
-    static float gRawValue = MIN_SENSOR_VALUE;
-    if(gRawValue == MAX_SENSOR_VALUE)
+    sensor = "/sys/class/power_supply/BAT0/voltage_now";
+#endif
+
+    FILE* f = fopen(sensor, "r");
+    if(f != nullptr)
     {
-        gRawValue = MIN_SENSOR_VALUE;
+        size_t length = 0;
+        char* read = nullptr;
+        if((getline(&read, &length, f) != -1) && read != nullptr && length > 0)
+        {
+            reading = atof(read);
+        }
+        fclose(f);
     }
-    reading = gRawValue;
-    gRawValue++;
+
+#ifndef __ANDROID__
+    reading = reading/100000; // Microvolts, produces number close to our hardware
 #endif
 
     return reading;
@@ -356,7 +366,6 @@ struct sensors_module_t HAL_MODULE_INFO_SYM =
     .get_sensors_list = get_thermasol_sensors_list
 };
 #else
-#include <cstdio>
 #include <sstream>
 #include <iomanip>
 int main()
