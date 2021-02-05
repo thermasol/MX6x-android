@@ -14,6 +14,7 @@
 #include <unistd.h>
 #include <string.h>
 
+#include <cmath>
 #include <deque>
 #include <chrono>
 #include <algorithm>
@@ -66,6 +67,50 @@ void* accelerometer(void* parameters)
     return nullptr;
 }
 
+float read_temperature_sensor()
+{
+    float reading = 0.0f;
+#ifdef __ANDROID__
+    const char* TEMPERATURE_SENSOR_FILE = "/sys/bus/iio/devices/iio:device0/in_voltage_raw";
+#else
+    const float MIN_SENSOR_VALUE = 35.0f;
+    const float MAX_SENSOR_VALUE = 230.0f;
+    static float gRawValue = MIN_SENSOR_VALUE;
+    if(gRawValue == MAX_SENSOR_VALUE)
+    {
+        gRawValue = MIN_SENSOR_VALUE;
+    }
+    reading = gRawValue;
+    gRawValue++;
+#endif
+
+    return reading;
+}
+
+float process_raw_temperature_sensor_value()
+{
+    float raw = read_temperature_sensor();
+    const double R_ALPHA = 0.004793;
+
+    const float ADC_MAX = 256.0f;
+    const float B_FACTOR = 3650.0f;
+    const float VOLTAGE_MAX = 3.0f;
+    const float PCB_RESISTANCE_BIAS = 1210.0f;
+    const float KELVIN_CONVERSION_FACTOR = 273.15f;
+
+    float reading = 26.6667f; // Default set temperature 80.0F
+    float voltageIn = (raw*VOLTAGE_MAX)/(2*ADC_MAX);
+    float thermistorResistance = (PCB_RESISTANCE_BIAS*voltageIn)/(VOLTAGE_MAX-voltageIn);
+    float temperatureKelvin = (float)(B_FACTOR/log(thermistorResistance/R_ALPHA));
+    float temperatureCelsius = temperatureKelvin - KELVIN_CONVERSION_FACTOR;
+    if(temperatureCelsius > 0.0f)
+    {
+        reading = temperatureCelsius;
+    }
+
+    return reading;
+}
+
 void* temperature(void* parameters)
 {
     sensorParameters* tempParameters = (sensorParameters*)parameters;
@@ -78,7 +123,7 @@ void* temperature(void* parameters)
         event.type = SENSOR_TYPE_AMBIENT_TEMPERATURE;
         event.sensor = TEMP_HANDLE;
         event.timestamp = duration_cast<nanoseconds>(high_resolution_clock::now().time_since_epoch()).count();
-        event.temperature = 32.0f + randomize();
+        event.temperature = process_raw_temperature_sensor_value();
         pthread_mutex_lock(&gEventLock);
         gEvents.push_back(event);
         pthread_mutex_unlock(&gEventLock);
@@ -236,7 +281,7 @@ static const struct sensor_t sSensorList[] =
       .version    = 10,
       .handle     = TEMP_HANDLE,
       .type       = SENSOR_TYPE_AMBIENT_TEMPERATURE,
-      .maxRange   = 200.0f,
+      .maxRange   = 94.0f, // 200.0F
       .resolution = 0.01f,
       .power      = 0.0f,
       .minDelay   = 4*1000*1000,
@@ -335,7 +380,7 @@ int main()
             if(event->type != SENSOR_TYPE_META_DATA)
             {
                 std::stringstream ss;
-                time_t time = event->timestamp/1000/1000/1000; // seconds
+                time_t time = event->timestamp/1000/1000/1000; // Seconds
                 ss << std::put_time(std::localtime(&time), "%Y-%m-%d %X");
                 printf("%s: ", ss.str().c_str());
                 switch(events[count].sensor)
@@ -344,7 +389,9 @@ int main()
                         printf("%.2f %.2f %.2f\n", event->acceleration.x, event->acceleration.y, event->acceleration.z);
                         break;
                     case TEMP_HANDLE:
-                        printf("%.2f\n", event->temperature);
+                        float c = event->temperature;
+                        float f = c * 9 / 5 + 32;
+                        printf("%.2f %.2f\n", c, f);
                         break;
                 }
             }
