@@ -237,7 +237,7 @@ static int therma_flush(struct sensors_poll_device_1* pollDevice __unused, int h
 
 static int therma_poll(struct sensors_poll_device_t* pollDevice __unused, sensors_event_t* events, int count)
 {
-    while(gKeepPolling && gEvents.size() == 0)
+    while(gKeepPolling && (gEvents.size() == 0))
     {
         usleep(1); // Block
     }
@@ -370,6 +370,8 @@ struct sensors_module_t HAL_MODULE_INFO_SYM =
 #include <iomanip>
 int main()
 {
+    open_thermasol_sensors(nullptr, nullptr, nullptr);
+
     sensors_event_t events[39];
     therma_activate(nullptr, 0, 0);
     therma_activate(nullptr, 1, 0);
@@ -381,7 +383,7 @@ int main()
     therma_activate(nullptr, 1, 1);
     while(true)
     {
-        usleep(1);
+        usleep(2*1000*1000);
         int count = therma_poll(nullptr, events, 39);
         while(count--)
         {
