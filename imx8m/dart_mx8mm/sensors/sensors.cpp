@@ -239,7 +239,7 @@ static int therma_poll(struct sensors_poll_device_t* pollDevice __unused, sensor
 {
     while(gKeepPolling && (gEvents.size() == 0))
     {
-        usleep(1); // Block
+        usleep(1000*200); // Block
     }
 
     pthread_mutex_lock(&gEventLock);
