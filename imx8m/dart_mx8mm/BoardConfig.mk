@@ -115,7 +115,8 @@ TARGET_BOARD_DTS_CONFIG := \
         imx8mm-var-dart-dt8mcustomboard-legacy:fsl-imx8mm-var-dart-dt8mcustomboard-legacy.dtb \
 	imx8mm-var-som:fsl-imx8mm-var-som.dtb \
 	imx8mm-var-som-legacy:fsl-imx8mm-var-som-legacy.dtb \
-	imx8mm-var-som-7inch:fsl-imx8mm-var-som-7inch.dtb
+	imx8mm-var-som-7inch:fsl-imx8mm-var-som-7inch.dtb \
+	imx8mm-var-som-10inch:fsl-imx8mm-var-som-10inch.dtb
 
 BOARD_SEPOLICY_DIRS := \
        device/fsl/imx8m/sepolicy \
