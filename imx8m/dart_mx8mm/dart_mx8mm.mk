@@ -14,6 +14,8 @@ ifneq ($(wildcard $(IMX_DEVICE_PATH)/fstab.freescale),)
 $(shell touch $(IMX_DEVICE_PATH)/fstab.freescale)
 endif
 
+PRODUCT_SOONG_NAMESPACES += external/mesa3d
+
 # Overrides
 PRODUCT_NAME := dart_mx8mm
 PRODUCT_DEVICE := dart_mx8mm
