@@ -68,6 +68,9 @@ BOARD_VENDOR_KERNEL_MODULES +=     \
     $(KERNEL_OUT)/drivers/net/wireless/broadcom/brcm80211/brcmfmac/brcmfmac.ko
 endif
 
+BOARD_VENDOR_KERNEL_MODULES +=     \
+    $(KERNEL_OUT)/drivers/input/touchscreen/atmel_mxt_ts.ko
+
 # CONFIG_CLK_IMX8MM: clk-imx8mm.ko
 # CONFIG_IMX8M_PM_DOMAINS: imx8m_pm_domains.ko, this driver still not upstream
 # CONFIG_PINCTRL_IMX8MM: pinctrl-imx8mm.ko
