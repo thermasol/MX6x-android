@@ -130,6 +130,8 @@ TARGET_BOARD_DTS_CONFIG := \
 	imx8mm-var-som-symphony:imx8mm-var-som-symphony.dtb \
 	imx8mm-var-som-symphony-m4:imx8mm-var-som-symphony-m4.dtb \
 	imx8mm-var-som-symphony-legacy:imx8mm-var-som-symphony-legacy.dtb \
+	imx8mm-var-som-symphony-7inch:imx8mm-var-som-symphony-7inch.dtb \
+	imx8mm-var-som-symphony-10inch:imx8mm-var-som-symphony-10inch.dtb \
 	imx8mm-var-som-symphony-legacy-m4:imx8mm-var-som-symphony-legacy-m4.dtb \
 
 BOARD_SEPOLICY_DIRS := \
